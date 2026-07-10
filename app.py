@@ -42,9 +42,7 @@ st.set_page_config(
 load_dotenv()
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+client = genai.Client(api_key=api_key)
 
 # ==========================================================
 # INITIALIZE SESSION
