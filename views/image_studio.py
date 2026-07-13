@@ -7,9 +7,6 @@ from image_generator import generate_image
 
 def render_image_studio(client):
 
-    # =====================================================
-    # PAGE HEADER
-    # =====================================================
 
     st.title("🎨 AI Image Studio")
 
@@ -19,9 +16,7 @@ def render_image_studio(client):
 
     st.divider()
 
-    # =====================================================
-    # PROMPT INPUT
-    # =====================================================
+    
 
     prompt = st.text_area(
         "Describe your image",
@@ -38,9 +33,7 @@ cinematic.
 """
     )
 
-    # =====================================================
-    # PROMPT STATS
-    # =====================================================
+    
 
     characters = len(prompt)
     words = len(prompt.split())
@@ -48,9 +41,7 @@ cinematic.
 
    
 
-    # ==========================================================
-# SIDEBAR
-# ==========================================================
+
 
     with st.sidebar:
 
@@ -140,9 +131,6 @@ cinematic.
 
         st.info("Powered by Pollinations AI")
 
-    # =====================================================
-    # BUTTONS
-    # =====================================================
 
     col1, col2 = st.columns(2)
 
@@ -160,10 +148,7 @@ cinematic.
             use_container_width=True
         )
 
-    # =====================================================
-    # ENHANCE PROMPT
-    # =====================================================
-
+  
     if enhance:
 
         if not prompt.strip():
@@ -207,9 +192,7 @@ Prompt:
 
                     st.error(e)
 
-    # =====================================================
-    # SHOW ENHANCED PROMPT
-    # =====================================================
+  
 
     if "enhanced_prompt" in st.session_state:
 
@@ -223,9 +206,7 @@ Prompt:
             height=180
         )
 
-    # =====================================================
-    # GENERATE IMAGE
-    # =====================================================
+  
 
     if generate:
 
@@ -242,7 +223,7 @@ Prompt:
 
             with st.spinner("Generating Image..."):
 
-                # Add style into prompt
+           
 
                 final_prompt = (
                     f"{final_prompt}, "

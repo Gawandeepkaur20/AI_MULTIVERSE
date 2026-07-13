@@ -18,9 +18,7 @@ from utils import (
 )
 from prompts import PERSONALITIES
 
-# ==========================================================
-# MAIN FUNCTION
-# ==========================================================
+
 
 def render_chat(client):
 
@@ -29,9 +27,7 @@ def render_chat(client):
     if "selected_personality" not in st.session_state:
         st.session_state.selected_personality = "Ethical Hacker"
 
-    # ==========================================================
-    # CUSTOM CSS
-    # ==========================================================
+   
 
     st.markdown("""
     <style>
@@ -86,13 +82,10 @@ def render_chat(client):
 
     </style>
     """, unsafe_allow_html=True)
-# ==========================================================
-# SIDEBAR
-# ==========================================================
 
     with st.sidebar:
 
-        st.title("🤖 AI Chat")
+        st.title("🤖 Multiverse Chat")
 
         st.caption("Multiple AI Personalities")
 
@@ -114,15 +107,46 @@ def render_chat(client):
            st.session_state.page = "image"
            st.rerun()
 
-        st.divider()
+       
 
-        st.subheader("Current Universe")
-
-        st.success(st.session_state.selected_personality)
+        
 
         st.divider()
+        st.subheader("Response")
 
-        st.subheader("Conversation")
+        st.session_state.response_length = st.select_slider(
+        "Response Length",
+    options=["Short", "Medium", "Long"],
+    value=st.session_state.get("response_length", "Medium")
+        )
+
+        st.divider()
+        
+        
+
+        with st.expander("Conversation History"):
+
+            if not st.session_state.conversation_log:
+
+               st.info("No conversation yet.")
+
+            else:
+
+               for msg in st.session_state.conversation_log:
+
+                    if msg["role"] == "user":
+
+                        st.markdown(f"👤 {msg['content']}")
+
+                    else:
+
+                        st.markdown(
+                            f"🤖 {msg['personality']}"
+                        )
+
+                        st.write(msg["content"])
+        st.divider()               
+        st.subheader("Statistics")
 
         st.metric(
         "Messages",
@@ -145,7 +169,7 @@ def render_chat(client):
         )
 
         st.divider()
-
+                        
         if st.button(
         "🗑 Clear Conversation",
         use_container_width=True
@@ -157,16 +181,8 @@ def render_chat(client):
 
         st.info("Powered by Gemini 2.5")
 
-        st.divider()
-
-        st.markdown(
-            "<h4 style='text-align:center;'>Powered by Gemini</h4>",
-            unsafe_allow_html=True
-        )
-
-    # ==========================================================
-    # HEADER
-    # ==========================================================
+  
+   
 
     left, right = st.columns([6,1])
 
@@ -182,9 +198,6 @@ def render_chat(client):
 
     st.divider()
 
-    # ==========================================================
-    # AI UNIVERSES
-    # ==========================================================
 
     st.subheader("Choose Your AI Universe")
 
@@ -296,9 +309,7 @@ def render_chat(client):
                         st.session_state.selected_personality = universe["key"]
 
                         st.rerun()
-    # ==========================================================
-    # CURRENT UNIVERSE
-    # ==========================================================
+   
 
     UNIVERSE_INFO = {
 
@@ -362,9 +373,7 @@ def render_chat(client):
 
     st.divider()
 
-    # ==========================================================
-    # DISPLAY CHAT
-    # ==========================================================
+   
 
     display_chat()
 
@@ -374,9 +383,7 @@ def render_chat(client):
             "💡 Select an AI Universe and ask your first question to begin the conversation."
         )
 
-    # ==========================================================
-    # CHAT INPUT
-    # ==========================================================
+   
 
     user_prompt = st.chat_input(
         "Type your message here..."
@@ -385,43 +392,62 @@ def render_chat(client):
     if not user_prompt:
         return
 
-    # ==========================================================
-    # USER MESSAGE
-    # ==========================================================
+   
 
     add_user_message(user_prompt)
+    
+    
 
     with st.chat_message("user"):
 
         st.write(user_prompt)
 
-    # ==========================================================
-    # BUILD CONVERSATION
-    # ==========================================================
+   
 
     conversation = build_conversation()
+
+    response_rules = {
+    "Short": """
+- Reply in ONLY 2-4 sentences.
+- Maximum 80 words.
+- Be concise.
+""",
+
+    "Medium": """
+- Reply in 1-2 paragraphs.
+- Maximum 180 words.
+""",
+
+    "Long": """
+- Give a detailed explanation.
+- Use headings or bullet points when appropriate.
+- Up to 500 words.
+"""
+}
 
     ai_prompt = f"""
 You MUST behave ONLY as the following personality.
 
 {PERSONALITIES[st.session_state.selected_personality]}
 
-Never mention that you are an AI language model.
+STRICT RESPONSE RULES
 
-Never break character.
+{response_rules[st.session_state.response_length]}
 
-Always respond exactly as this personality.
+Additional Rules
 
-Conversation:
+- Never say you are an AI.
+- Never break character.
+- Remember previous conversation.
+- Continue naturally.
+
+Conversation
 
 {conversation}
 
 Assistant:
 """
-
-    # ==========================================================
-    # AI RESPONSE
-    # ==========================================================
+   
 
     with st.chat_message("assistant"):
 
@@ -448,11 +474,11 @@ Assistant:
 
         st.write(ai_response)
 
-    # ==========================================================
-    # SAVE CHAT
-    # ==========================================================
+    
 
     add_ai_message(ai_response)
+    
+  
 
     update_statistics(user_prompt)
 

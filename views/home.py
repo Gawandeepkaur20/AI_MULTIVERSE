@@ -3,9 +3,7 @@ import streamlit as st
 
 def render_home():
 
-    # ==========================================================
-    # CSS
-    # ==========================================================
+   
 
     st.markdown("""
     <style>
@@ -45,10 +43,7 @@ def render_home():
     </style>
     """, unsafe_allow_html=True)
 
-    # ==========================================================
-    # SIDEBAR
-    # ==========================================================
-
+  
     with st.sidebar:
 
         st.title("🌌 AI Multiverse")
@@ -60,7 +55,7 @@ def render_home():
         st.subheader("Applications")
 
         if st.button(
-            "🤖 Chat AI",
+            "🤖 Multiverse Chat",
             use_container_width=True
         ):
 
@@ -89,16 +84,10 @@ Powered by
 """
         )
 
-    # ==========================================================
-    # HEADER
-    # ==========================================================
 
     
 
-    # ==========================================================
-    # INTRO
-    # ==========================================================
-
+  
     st.markdown(
         """
 ## Welcome
@@ -111,20 +100,17 @@ Choose an application below to get started.
 
     st.write("")
 
-    # ==========================================================
-    # APP CARDS
-    # ==========================================================
+   
 
     col1, col2 = st.columns(2)
 
-    # ----------------------------------------------------------
 
     with col1:
 
         with st.container(border=True):
 
             st.markdown(
-                "<h2 style='text-align:center;'>🤖 Chat AI</h2>",
+                "<h2 style='text-align:center;'>🤖 Multiverse Chat</h2>",
                 unsafe_allow_html=True
             )
 
@@ -146,14 +132,14 @@ Interact with multiple AI personalities including:
             st.write("")
 
             if st.button(
-                "Launch Chat AI",
+                "Launch Multiverse Chat",
                 use_container_width=True
             ):
 
                 st.session_state.page = "chat"
                 st.rerun()
 
-    # ----------------------------------------------------------
+
 
     with col2:
 
@@ -191,9 +177,7 @@ Create professional AI artwork with:
     st.write("")
     st.write("")
 
-    # ==========================================================
-    # FUTURE FEATURES
-    # ==========================================================
+   
 
     st.subheader("🚀 Coming Soon")
 

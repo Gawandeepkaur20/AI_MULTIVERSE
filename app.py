@@ -10,7 +10,7 @@ from views.home import render_home
 from views.chat import render_chat
 from views.image_studio import render_image_studio
 
-# ----------------------------------------------------
+
 
 st.set_page_config(
     page_title=APP_TITLE,
@@ -36,7 +36,6 @@ if "page" not in st.session_state:
 if "selected_personality" not in st.session_state:
     st.session_state.selected_personality = "Ethical Hacker"
 
-# ----------------------------------------------------
 
 if st.session_state.page == "home":
 

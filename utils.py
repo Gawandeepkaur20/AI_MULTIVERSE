@@ -1,14 +1,10 @@
-# ==========================================================
-# UTILITY FUNCTIONS
-# ==========================================================
+
 
 import streamlit as st
 from config import TOKEN_RATIO
 
 
-# ==========================================================
-# SESSION STATE
-# ==========================================================
+
 
 def initialize_session():
     """
@@ -17,6 +13,9 @@ def initialize_session():
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
+        
+    if "conversation_log" not in st.session_state:
+        st.session_state.conversation_log = []    
 
     if "total_characters" not in st.session_state:
         st.session_state.total_characters = 0
@@ -28,14 +27,9 @@ def initialize_session():
         st.session_state.total_tokens = 0
 
 
-# ==========================================================
-# MESSAGE FUNCTIONS
-# ==========================================================
+
 
 def add_user_message(message):
-    """
-    Store user's message.
-    """
 
     st.session_state.messages.append(
         {
@@ -44,11 +38,15 @@ def add_user_message(message):
         }
     )
 
+    st.session_state.conversation_log.append(
+        {
+            "role": "user",
+            "content": message,
+            "personality": st.session_state.selected_personality
+        }
+    )
 
 def add_ai_message(message):
-    """
-    Store AI response.
-    """
 
     st.session_state.messages.append(
         {
@@ -57,6 +55,14 @@ def add_ai_message(message):
         }
     )
 
+    st.session_state.conversation_log.append(
+        {
+            "role": "assistant",
+            "content": message,
+            "personality": st.session_state.selected_personality
+        }
+    )
+    
 
 def clear_chat():
     """
@@ -64,6 +70,8 @@ def clear_chat():
     """
 
     st.session_state.messages = []
+    
+    st.session_state.conversation_log = []
 
     st.session_state.total_characters = 0
 
@@ -72,9 +80,6 @@ def clear_chat():
     st.session_state.total_tokens = 0
 
 
-# ==========================================================
-# TEXT ANALYSIS
-# ==========================================================
 
 def count_characters(text):
 
@@ -91,9 +96,6 @@ def estimate_tokens(text):
     return round(len(text) / TOKEN_RATIO)
 
 
-# ==========================================================
-# SESSION STATISTICS
-# ==========================================================
 
 def update_statistics(text):
 
@@ -104,13 +106,10 @@ def update_statistics(text):
     st.session_state.total_tokens += estimate_tokens(text)
 
 
-# ==========================================================
-# CHAT DISPLAY
-# ==========================================================
 
 def display_chat():
 
-    for message in st.session_state.messages:
+    for message in st.session_state.conversation_log:
 
         if message["role"] == "user":
 
@@ -124,9 +123,7 @@ def display_chat():
 
                 st.write(message["content"])
 
-# ==========================================================
-# BUILD CONVERSATION HISTORY
-# ==========================================================
+
 
 def build_conversation():
 
